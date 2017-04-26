@@ -1,0 +1,75 @@
+description = """Parent configuration"""
+
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'groovy'
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+		
+group = 'net.gcolin'
+version = '1.0'
+	
+install.repositories.mavenInstaller.pom.project {
+    inceptionYear '2017'
+    developers {
+        developer {
+            name "Gael COLIN"
+        }
+    }
+    licenses {
+        license {
+            name 'The Apache Software License, Version 2.0'
+            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+            distribution 'manual'
+        }
+    }
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "http://repo.test/simple-repo/repository/releases") {
+                authentication(userName: "tomcat", password: "tomcat")
+            }
+            snapshotRepository(url: "http://repo.test/simple-repo/repository/snapshots") {
+                authentication(userName: "tomcat", password: "tomcat")
+            }
+        }
+    }
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+		
+task sourcesJar(type: Jar, dependsOn:classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn:javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+repositories {
+    mavenLocal()
+    maven {
+	url "http://repo.test/simple-repo/repository/public"
+    }
+    mavenCentral()
+    jcenter()
+}
+
+
+dependencies {
+    compile gradleApi()
+    compile localGroovy()
+}
