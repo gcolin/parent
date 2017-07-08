@@ -52,17 +52,17 @@ public final class ParentPlugin implements Plugin<Project>{
                 sourceCompatibility = 1.8
                 targetCompatibility = 1.8
 
-				if (tasks.findByPath('sourcesJar') == null) {
-					task('sourcesJar', type: Jar, dependsOn:classes) {
-						classifier = 'sources'
-						from sourceSets.main.allSource
-					}
+                if (tasks.findByPath('sourcesJar') == null) {
+                    task('sourcesJar', type: Jar, dependsOn:classes) {
+                        classifier = 'sources'
+                        from sourceSets.main.allSource
+                    }
 					
-					task('javadocJar',type: Jar, dependsOn:javadoc) {
-						classifier = 'javadoc'
-						from javadoc.destinationDir
-					}
-				}
+                    task('javadocJar',type: Jar, dependsOn:javadoc) {
+                        classifier = 'javadoc'
+                        from javadoc.destinationDir
+                    }
+                }
 
                 artifacts {
                     archives sourcesJar
@@ -70,11 +70,6 @@ public final class ParentPlugin implements Plugin<Project>{
                 }
                 
                 project.dependencies.add("testCompile", "junit:junit:4.11")
-                project.dependencies.add("testCompile", "org.slf4j:slf4j-simple:1.7.21")
-				ext.slf4japi = "org.slf4j:slf4j-api:1.7.21";
-				ext.addSlf4j = {
-					project.dependencies.add("compile", slf4japi)
-				}
 
                 tasks.withType(FindBugs) {
                     excludeFilter rootProject.file("FindBugsFilter.xml")
